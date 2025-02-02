@@ -42,7 +42,20 @@ export const getTitle = (title) => {
                </Text>
           );
      } else {
-          return null;
+          return (
+               <Text
+                    bold
+                    mb={1}
+                    pr={3}
+                    fontSize={{
+                         base: 'sm',
+                         lg: 'lg',
+                    }}
+                    maxW="100%"
+                    flexWrap="wrap">
+                    Title Not Available
+               </Text>
+          );
      }
 };
 
@@ -56,6 +69,24 @@ export function getCleanTitle(title) {
           return displayTitle;
      }
      return 'Unknown';
+}
+
+export const getCallNumber = (callNumber) => {
+     const { language } = React.useContext(LanguageContext);
+     if (callNumber) {
+          return (
+               <Text
+                    maxW="100%"
+                    flexWrap="wrap"
+                    fontSize={{
+                         base: 'xs',
+                         lg: 'sm',
+                    }}>
+                    <Text bold>{getTermFromDictionary(language, 'call_number')}:</Text> {callNumber}
+               </Text>
+          );
+     }
+     return null;
 }
 
 export const getVolume = (volume) => {

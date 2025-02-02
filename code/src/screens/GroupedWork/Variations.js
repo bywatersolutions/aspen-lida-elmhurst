@@ -211,7 +211,15 @@ export const Variations = (props) => {
                                                                  </SelectDragIndicatorWrapper>
                                                                  <SelectScrollView>
                                                                       {_.map(holdSelectItemResponse.items, function (item, index, array) {
-                                                                           return <SelectItem label={item.callNumber} value={item.itemNumber} key={index} />;
+                                                                           let itemLabel = "";
+                                                                           if (item.location) {
+                                                                                itemLabel = item.location + " - ";
+                                                                           }
+                                                                           itemLabel += item.callNumber;
+                                                                           if (item.status) {
+                                                                                itemLabel += " - " + item.status;
+                                                                           }
+                                                                           return <SelectItem label={itemLabel} value={item.itemNumber} key={index} />;
                                                                       })}
                                                                  </SelectScrollView>
                                                             </SelectContent>
@@ -231,7 +239,7 @@ export const Variations = (props) => {
                                                        bgColor={theme['colors']['primary']['500']}
                                                        onPress={async () => {
                                                             setPlacingItemHold(true);
-                                                            await placeHold(library.baseUrl, selectedItem, 'ils', holdSelectItemResponse.patronId, holdSelectItemResponse.pickupLocation, '', 'item', null, null, null, holdSelectItemResponse.bibId, language).then(async (result) => {
+                                                            await placeHold(library.baseUrl, selectedItem, 'ils', holdSelectItemResponse.patronId, holdSelectItemResponse.pickupLocation, holdSelectItemResponse.sublocation, '', 'item', null, null, null, holdSelectItemResponse.bibId, language).then(async (result) => {
                                                                  setResponse(result);
                                                                  queryClient.invalidateQueries({ queryKey: ['holds', holdSelectItemResponse.patronId, library.baseUrl, language] });
                                                                  queryClient.invalidateQueries({ queryKey: ['user', library.baseUrl, language] });

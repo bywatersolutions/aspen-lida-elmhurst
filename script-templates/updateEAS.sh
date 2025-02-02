@@ -45,7 +45,7 @@ then
           for site in ${sites[@]}
               do
                 eval site=$site
-                  node copyConfig.js
+                  node copyConfig.js --instance=$site
                   node updateConfig.js --instance=$site --env=$channel
                   sed -i "s/{{APP_ENV}}/$site/g" ../code/eas.json
                   cd ../code
@@ -54,7 +54,7 @@ then
                   cd ../scripts
               done
         else
-          node copyConfig.js
+          node copyConfig.js --instance=$slug
           node updateConfig.js --instance=$slug --env=$channel
           sed -i "s/{{APP_ENV}}/$slug/g" ../code/eas.json
           cd ../code
@@ -77,7 +77,7 @@ then
         for site in ${sites[@]}
             do
               eval site=$site
-                node copyConfig.js
+                node copyConfig.js --instance=$site
                 node updateConfig.js --instance=$site --env=$channel
                 sed -i "s/{{APP_ENV}}/$site/g" ../code/eas.json
 
@@ -87,7 +87,7 @@ then
                 cd ../scripts
             done
       else
-        node /usr/local/aspen-lida/scripts/copyConfig.js
+        node /usr/local/aspen-lida/scripts/copyConfig.js --instance=$slug
         node /usr/local/aspen-lida/scripts/updateConfig.js --instance=$slug --env=$channel
         sed -i'.bak' "s/{{APP_ENV}}/$slug/g" eas.json
 
@@ -110,7 +110,7 @@ then
       for site in ${sites[@]}
           do
             eval site=$site
-              node copyConfig.js
+              node copyConfig.js --instance=$site
               node updateConfig.js --instance=$site --env=$channel
               sed -i "s/{{APP_ENV}}/$site/g" cd ../code/eas.json
 
@@ -122,7 +122,7 @@ then
               cd ../scripts
           done
     else
-      node copyConfig.js
+      node copyConfig.js --instance=$slug
       node updateConfig.js --instance=$slug --env=$channel
       sed -i "s/{{APP_ENV}}/$slug/g" eas.json
 

@@ -62,7 +62,7 @@ then
       do
 	eval site=$site
 	 printf "\nUpdating %s in channel %s for %s platform(s)... \n" "$site" "$channel" "$osPlatform"
-	  node copyConfig.js
+	  node copyConfig.js --instance=$site
 	  node updateConfig.js --instance=$site --env=$channel
 	  sed -i "s/{{APP_ENV}}/$site/g" ../code/eas.json
 	  cd ../code
@@ -76,7 +76,7 @@ then
       done
 else
   printf "\nUpdating %s in channel %s for %s platform(s)... \n" "$slug" "$channel" "$osPlatform"
-  node copyConfig.js
+  node copyConfig.js --instance=$slug
   node updateConfig.js --instance=$slug --env=$channel
   sed -i "s/{{APP_ENV}}/$slug/g" ../code/eas.json
   cd ../code

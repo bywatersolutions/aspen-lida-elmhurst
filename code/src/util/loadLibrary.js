@@ -128,8 +128,6 @@ export async function getAppSettings(url, timeout, slug) {
                headers: getHeaders(),
                auth: createAuthTokens(),
           });
-          //console.log("API call: ");
-          //console.log(api);
           const response = await api.get('/SystemAPI?method=getAppSettings', {
                slug
           });
@@ -142,15 +140,17 @@ export async function getAppSettings(url, timeout, slug) {
                //console.log('App settings saved');
                return response.data?.result?.settings ?? [];
           } else {
-               console.log("Did not get valid response from getAppSettings");
+               console.log("Did not get valid response from getAppSettings url: " + url + " slug: " + slug);
                if (response === undefined) {
                     console.log("Response was undefined :(");
                }else{
                     console.log(response);
                }
+               popToast(getTermFromDictionary('en', 'error_no_server_connection'), "Could not retrieve valid App Settings, please try again later.", 'error');
                return [];
           }
      }catch (err) {
+          popToast(getTermFromDictionary('en', 'error_no_server_connection'), "Could not retrieve App Settings, please try again later.", 'error');
           console.log("Exception in getAppSettings " + err);
           return [];
      }
@@ -216,6 +216,48 @@ export async function getPickupLocations(url = null) {
      } else {
           console.log(response);
      }
+}
+
+export async function getPickupSublocations(url = null) {
+     //console.log("In getPickupSublocations");
+     let baseUrl = url ?? LIBRARY.url;
+     const postBody = await postData();
+     const api = create({
+          baseURL: baseUrl + '/API',
+          timeout: GLOBALS.timeoutAverage,
+          headers: getHeaders(true),
+          auth: createAuthTokens()
+     });
+     const response = await api.post('/UserAPI?method=getValidSublocations', postBody);
+
+     if (response.ok) {
+          //console.log("getValidSublocations response");
+          //console.log(response.data);
+          if (response.data.result.success) {
+               //console.log("All valid sublocations are");
+               //console.log(response.data);
+
+               const data = response.data.result.sublocations;
+
+               if (_.isObject(data) || _.isArray(data)) {
+                    sublocations = data;
+               }else{
+                    sublocations = [];
+               }
+
+               PATRON.sublocations = sublocations;
+               return sublocations;
+          }else{
+               console.log("Call to get sublocations did not succeed");
+               console.log(response);
+          }
+     } else {
+          console.log("Call to get sublocations failed");
+          console.log(response);
+     }
+     sublocations = [];
+     PATRON.sublocations = sublocations;
+     return sublocations;
 }
 
 /**

@@ -71,6 +71,8 @@ export const PlaceHold = (props) => {
 
      console.log(pickupLocation);
 
+     const [sublocation, setSublocation] = React.useState(null);
+
      //console.log(pickupLocation);
      let promptForHoldNotifications = user.promptForHoldNotifications ?? false;
 
@@ -122,7 +124,7 @@ export const PlaceHold = (props) => {
                          maxWidth="100%"
                          onPress={async () => {
                               setLoading(true);
-                              await completeAction(record, type, user.id, null, null, pickupLocation, library.baseUrl, null, 'default').then(async (ilsResponse) => {
+                              await completeAction(record, type, user.id, null, null, pickupLocation, sublocation, library.baseUrl, null, 'default').then(async (ilsResponse) => {
                                    setResponse(ilsResponse);
                                    if (ilsResponse?.confirmationNeeded && ilsResponse.confirmationNeeded) {
                                         setHoldConfirmationResponse({

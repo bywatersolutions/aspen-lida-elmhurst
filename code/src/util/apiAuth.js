@@ -80,6 +80,7 @@ export function getHeaders(isPost = false, language = 'en') {
      headers['User-Agent'] = 'Aspen LiDA ' + Device.modelName + ' ' + Device.osName + '/' + Device.osVersion;
      headers['Version'] = 'v' + GLOBALS.appVersion + ' [b' + GLOBALS.appBuild + '] p' + GLOBALS.appPatch;
      headers['LiDA-SessionID'] = GLOBALS.appSessionId;
+     headers['LiDA-Slug'] = GLOBALS.slug;
      headers['Cache-Control'] = 'no-cache';
      headers['Preferred-Language'] = language;
 

@@ -23,7 +23,7 @@ do
 	*) serverOption=$item; break;;
     esac
 done
-node copyConfig.js
+node copyConfig.js --instance=$site
 node updateConfig.js --instance=$site --env=none
 #sed -i "s/{{APP_ENV}}/$site/g" ../code/eas.json
 

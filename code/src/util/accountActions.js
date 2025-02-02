@@ -399,6 +399,9 @@ export async function freezeHold(cancelId, recordId, source, url, patronId, sele
      });
      const response = await api.post('/UserAPI?method=freezeHold', postBody);
 
+     //console.log("freeze hold result");
+     //console.log(response);
+
      if (response.ok) {
           //console.log(response);
           const fetchedData = response.data;
@@ -451,35 +454,50 @@ export async function freezeHolds(data, url, selectedReactivationDate = null, la
                     userId: hold.patronId,
                },
           });
+          //console.log("Freezing " + hold.recordId);
           const response = await api.post('/UserAPI?method=freezeHold', postBody);
           if (response.ok) {
                const fetchedData = response.data;
                const result = fetchedData.result;
 
-               if (result.success === true) {
+               //console.log("Freeze Hold for " + hold.recordId + " finished");
+               //console.log(result);
+
+               if (result.success == true) {
                     numSuccess = numSuccess + 1;
                } else {
                     numFailed = numFailed + 1;
                }
           } else {
                popToast(getTermFromDictionary(language, 'error_no_server_connection'), getTermFromDictionary(language, 'error_no_library_connection'), 'error');
+               console.log("Did not get a good response freezing hold " + hold.recordId);
                console.log(response);
+               numFailed = numFailed + 1;
           }
      });
 
+     //Wait for all actions to finish
+     const results = await Promise.all(holdsToFreeze);
+
      //await reloadHolds();
+     //console.log("Done freezing holds, numSuccess = " + numSuccess + " numFailed = " + numFailed);
 
      let message = '';
      let status = 'success';
+     let title = getTermFromDictionary(language, 'holds_frozen');
      if (numSuccess > 0) {
           message = message.concat(numSuccess + ' holds frozen successfully.');
      }
 
      if (numFailed > 0) {
-          status = 'warning';
+          status = 'error';
           message = message.concat(' Unable to freeze ' + numFailed + ' holds.');
+          if (numSuccess == 0) {
+               title = getTermFromDictionary(language, 'unable_freeze_hold');
+          }
      }
-     popAlert(getTermFromDictionary(language, 'holds_frozen'), message, status);
+
+     popAlert(title, message, status);
 }
 
 export async function thawHold(cancelId, recordId, source, url, patronId, language = 'en') {
@@ -654,22 +672,26 @@ export async function cancelHolds(data, url, language = 'en') {
      popAlert(getTermFromDictionary(language, 'holds_cancelled'), message, status);
 }
 
-export async function changeHoldPickUpLocation(holdId, newLocation, url = null, userId, language = 'en') {
+export async function changeHoldPickUpLocation(holdId, newLocation, newSublocation, url = null, userId, language = 'en') {
      let baseUrl = url ?? LIBRARY.url;
      const postBody = await postData();
+     const params = {
+          sessionId: GLOBALS.appSessionId,
+          holdId,
+          newLocation,
+          newSublocation,
+          userId,
+     };
      const api = create({
           baseURL: baseUrl + '/API',
           timeout: GLOBALS.timeoutFast,
           headers: getHeaders(true),
           auth: createAuthTokens(),
-          params: {
-               sessionId: GLOBALS.appSessionId,
-               holdId,
-               newLocation,
-               userId,
-          },
+          params: params,
      });
      const response = await api.post('/UserAPI?method=changeHoldPickUpLocation', postBody);
+     //console.log("Changing hold pickup location");
+     //console.log(params);
 
      if (response.ok) {
           const fetchedData = response.data;
