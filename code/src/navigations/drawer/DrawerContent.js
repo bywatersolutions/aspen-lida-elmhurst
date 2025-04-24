@@ -910,7 +910,7 @@ const Events = () => {
                          <Icon as={MaterialIcons} name="chevron-right" size="7" />
                          <VStack w="100%">
                               <Text fontWeight="500">
-                                   {getTermFromDictionary(language, 'events')} <Text bold>({user.numSavedEvents ?? 0})</Text>
+                                   {getTermFromDictionary(language, 'events')}
                               </Text>
                          </VStack>
                     </HStack>
