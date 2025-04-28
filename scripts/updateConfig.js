@@ -97,6 +97,7 @@ const app_config = {
           jsEngine: 'jsc',
           config: {
                googleMapsApiKey: owner['googleApiKeyApple'],
+               usesNonExemptEncryption: false,
           },
           privacyManifests: {
                NSPrivacyAccessedAPITypes: [
