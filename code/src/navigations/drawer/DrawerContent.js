@@ -60,13 +60,13 @@ export const DrawerContent = () => {
      const [userLongitude, setUserLongitude] = React.useState(0);
      const linkTo = useLinkTo();
      const queryClient = useQueryClient();
-     const { user, accounts, viewers, cards, lists, updateUser, updateLanguage, updatePickupLocations, updateLinkedAccounts, updateLists, updateSavedEvents, updateLibraryCards, updateLinkedViewerAccounts, updateReadingHistory, notificationSettings, expoToken, updateNotificationOnboard, notificationOnboard, notificationHistory, updateNotificationHistory } = React.useContext(UserContext);
+     const { user, accounts, viewers, cards, lists, updateUser, updateLanguage, updatePickupLocations, updateLinkedAccounts, updateLists, updateSavedEvents, updateLibraryCards, updateLinkedViewerAccounts, updateReadingHistory, notificationSettings, expoToken, updateNotificationOnboard, notificationOnboard, notificationHistory, updateNotificationHistory, userHoldPendingSortMethod, userHoldReadySortMethod } = React.useContext(UserContext);
      const { library, catalogStatus, updateCatalogStatus } = React.useContext(LibrarySystemContext);
      const [notifications, setNotifications] = React.useState([]);
      const [messages, setILSMessages] = React.useState([]);
      const { category, list, maxNum, updateBrowseCategories, updateBrowseCategoryList, updateMaxCategories } = React.useContext(BrowseCategoryContext);
      const { checkouts, updateCheckouts } = React.useContext(CheckoutsContext);
-     const { holds, updateHolds, pendingSortMethod, readySortMethod } = React.useContext(HoldsContext);
+     const { holds, updateHolds } = React.useContext(HoldsContext);
      const { language } = React.useContext(LanguageContext);
      const [invalidSession, setInvalidSession] = React.useState(false);
      const discoveryVersion = formatDiscoveryVersion(library.discoveryVersion) ?? '23.03.00';
@@ -141,7 +141,7 @@ export const DrawerContent = () => {
           initialData: category,
      });
 
-     useQuery(['holds', user.id, library.baseUrl, language], () => getPatronHolds(readySortMethod, pendingSortMethod, 'all', library.baseUrl, false, language), {
+     useQuery(['holds', user.id, library.baseUrl, language], () => getPatronHolds(userHoldReadySortMethod, userHoldPendingSortMethod, 'all', library.baseUrl, false, language), {
           refetchInterval: 60 * 1000 * 15,
           refetchIntervalInBackground: true,
 		 refetchOnWindowFocus: 'always',
