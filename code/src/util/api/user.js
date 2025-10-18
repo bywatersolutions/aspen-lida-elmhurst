@@ -474,6 +474,7 @@ export async function deleteAspenUser(url) {
           if(results?.data?.result) {
                return results.data.result;
           } else {
+               logErrorMessage(results);
                return {
                     success: false,
                     message: 'Unknown error trying to complete request.'
