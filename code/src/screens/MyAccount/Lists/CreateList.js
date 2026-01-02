@@ -68,16 +68,11 @@ const CreateList = (props) => {
      const [groupName, setGroupName] = React.useState('');
      const [newGroupName, setNewGroupName] = React.useState('');
      const [nestedGroup, setNestedGroup] = React.useState('');
-     const [existingGroupId, setExistingGroupId] = React.useState('');
+     const [existingGroupId, setExistingGroupId] = React.useState(user.lastListGroupAdded ? user.lastListGroupAdded : listGroups.groups[0].id);
 
      let hasListGroups = false;
      if(user.numListGroups) {
           hasListGroups = user.numListGroups > 0;
-     }
-
-     let lastAddedGroup = null;
-     if(user.lastAddedGroup) {
-          lastAddedGroup = user.lastAddedGroup;
      }
 
      const toggle = () => {
@@ -90,7 +85,7 @@ const CreateList = (props) => {
           setGroupName('');
           setNewGroupName('');
           setNestedGroup('');
-          setExistingGroupId('');
+          setExistingGroupId(user.lastListGroupAdded ? user.lastListGroupAdded : listGroups.groups[0].id);
      };
 
      return (
@@ -224,7 +219,7 @@ const CreateList = (props) => {
                                                             <SelectDragIndicator />
                                                        </SelectDragIndicatorWrapper>
                                                        <SelectItem label={getTermFromDictionary(language, 'nest_within_group_no')} value="no" key={1} sx={{ _text: { color: textColor } }} />
-                                                       {_.map(listGroups, function (item, index, array) {
+                                                       {_.map(Object.values(listGroups.groups), function (item, index, array) {
                                                             return <SelectItem key={index} value={item.id} label={item.title} bgColor={existingGroupId === item.id ? theme['colors']['tertiary']['300'] : ''} sx={{ _text: { color: existingGroupId === item.id ? theme['colors']['tertiary']['500-text'] : textColor } }} />;
                                                        })}
                                                   </SelectContent>
@@ -240,16 +235,22 @@ const CreateList = (props) => {
                                         <FormControlLabelText color={textColor}>{getTermFromDictionary(language, 'choose_existing_list_group')}</FormControlLabelText>
                                    </FormControlLabel>
                                    <Select
-                                        selectedValue={existingGroupId}
-                                        defaultValue={lastAddedGroup}
+                                        selectedValue={existingGroupId !== -1 ? existingGroupId : listGroups.groups[0].id}
+                                        defaultValue={existingGroupId !== -1 ? existingGroupId : listGroups.groups[0].id}
                                         onValueChange={(itemValue) => {
                                              setExistingGroupId(itemValue);
                                         }}>
-                                        <SelectTrigger>
-                                             <SelectInput color={textColor} placeholder={getTermFromDictionary(language, 'choose_existing_list_group')} />
-                                             <SelectIcon mr="$3">
-                                                  <Icon color={textColor} as={ChevronDownIcon} />
-                                             </SelectIcon>
+                                        <SelectTrigger variant="outline" size="md">
+                                             {existingGroupId && existingGroupId !== -1 ? (
+                                                       _.map(Object.values(listGroups.groups), function (group, selectedIndex, array) {
+                                                            if (group.id === existingGroupId) {
+                                                                 return <SelectInput placeholder={group.title} value={group.id} color={textColor} />;
+                                                            }
+                                                       })
+                                                  ) :
+                                                  <SelectInput value={listGroups.groups[0].id} color={textColor} />
+                                             }
+                                             <SelectIcon mr="$3" as={ChevronDownIcon} color={textColor} />
                                         </SelectTrigger>
                                         <SelectPortal useRNModal={true} >
                                              <SelectBackdrop />
@@ -260,7 +261,7 @@ const CreateList = (props) => {
                                                   <SelectDragIndicatorWrapper>
                                                        <SelectDragIndicator />
                                                   </SelectDragIndicatorWrapper>
-                                                  {_.map(listGroups, function (item, index, array) {
+                                                  {_.map(Object.values(listGroups.groups), function (item, index, array) {
                                                        return <SelectItem key={index} value={item.id} label={item.title} bgColor={existingGroupId === item.id ? theme['colors']['tertiary']['300'] : ''} sx={{ _text: { color: existingGroupId === item.id ? theme['colors']['tertiary']['500-text'] : textColor } }} />;
                                                   })}
                                              </SelectContent>
