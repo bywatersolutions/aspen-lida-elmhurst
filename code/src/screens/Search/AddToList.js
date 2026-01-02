@@ -69,6 +69,22 @@ export const AddToList = (props) => {
      const queryClient = useQueryClient();
      const { theme, textColor, colorMode } = React.useContext(ThemeContext);
 
+     const [addToGroup, setAddToGroup] = React.useState('no');
+     const [groupName, setGroupName] = React.useState('');
+     const [newGroupName, setNewGroupName] = React.useState('');
+     const [nestedGroup, setNestedGroup] = React.useState('');
+     const [existingGroupId, setExistingGroupId] = React.useState('');
+
+     let hasListGroups = false;
+     if(user.numListGroups) {
+          hasListGroups = user.numListGroups > 0;
+     }
+
+     let lastAddedGroup = null;
+     if(user.lastAddedGroup) {
+          lastAddedGroup = user.lastAddedGroup;
+     }
+
      const toggleModal = () => {
           setOpen(!open);
           if (!open === true) {
