@@ -277,20 +277,16 @@ export const MyLists = () => {
                     </ScrollView>
                     {hasListGroups && Object.values(listGroups.groups) ? (
                          <>
-                              <Select
-                                   name="listGroupSelect"
-                                   selectedValue={currentListGroup}
-                                   defaultValue={defaultListGroup}
-                                   mt="$1"
-                                   mb="$2"
-                                   onValueChange={(itemValue) => updateSelectedListGroup(itemValue)}>
+                              <Select name="listGroupSelect" selectedValue={currentListGroup} defaultValue={defaultListGroup} mt="$1" mb="$2" onValueChange={(itemValue) => updateSelectedListGroup(itemValue)}>
                                    <SelectTrigger variant="outline" size="md">
-                                        {currentListGroup && currentListGroup !== -1 ? (
+                                        {currentListGroup && currentListGroup != "-1" ? (
                                              _.map(Object.values(listGroups.groups), function (group, selectedIndex, array) {
                                                   if (group.id === currentListGroup) {
                                                        return <SelectInput placeholder={group.title} value={group.id} color={textColor} />;
                                                   }
                                              })
+                                        ) : currentListGroup == "-1" ? (
+                                             <SelectInput value={getTermFromDictionary(language, 'unassigned_lists')} color={textColor} />
                                         ) : defaultListGroup ? (
                                              <SelectInput value={defaultListGroup} color={textColor} />
                                         ) : null}
@@ -298,23 +294,19 @@ export const MyLists = () => {
                                    </SelectTrigger>
                                    <SelectPortal>
                                         <SelectBackdrop />
-                                        <SelectContent
-                                             bgColor={colorMode === 'light' ? theme['colors']['warmGray']['50'] : theme['colors']['coolGray']['700']}
-                                             pb={Platform.OS === 'android' ? insets.bottom + 16 : '$4'}
-                                        >
+                                        <SelectContent bgColor={colorMode === 'light' ? theme['colors']['warmGray']['50'] : theme['colors']['coolGray']['700']} pb={Platform.OS === 'android' ? insets.bottom + 16 : '$4'}>
                                              <SelectDragIndicatorWrapper>
                                                   <SelectDragIndicator />
                                              </SelectDragIndicatorWrapper>
                                              {_.map(Object.values(listGroups.groups), function (item, index, array) {
                                                   return <SelectItem key={index} value={item.id} label={item.title} bgColor={currentListGroup === item.id ? theme['colors']['tertiary']['300'] : ''} sx={{ _text: { color: currentListGroup === item.id ? theme['colors']['tertiary']['500-text'] : textColor } }} />;
                                              })}
+                                             {listGroups.unassigned.length > 0 ? <SelectItem key={-1} value="-1" label={getTermFromDictionary(language, 'unassigned_lists')} bgColor={currentListGroup == "-1" ? theme['colors']['tertiary']['300'] : ''} sx={{ _text: { color: currentListGroup == "-1" ? theme['colors']['tertiary']['500-text'] : textColor } }} /> : null}
                                         </SelectContent>
                                    </SelectPortal>
                               </Select>
                               {currentListGroupData ? (
-                                   <Box borderBottomWidth="$1"
-                                        _dark={{ borderColor: 'gray.600' }}
-                                        borderColor="coolGray.200">
+                                   <Box>
                                         <Heading>{currentListGroupData.listGroupDetails?.title}</Heading>
                                         <ScrollView horizontal>
                                              <HStack space="sm">
@@ -325,14 +317,6 @@ export const MyLists = () => {
                                         </ScrollView>
                                         <FlatList mt="$2" data={currentListGroupData.listsInGroup} renderItem={({ item }) => renderList(item, library.baseUrl)} keyExtractor={(item, index) => index.toString()} ListEmptyComponent={listEmptyComponent} />
                                    </Box>
-                              ) : null}
-                              {listGroups.unassigned.length > 0 ? (
-                                   <>
-                                        <Heading mt="$5" size="md" color={textColor}>
-                                             {getTermFromDictionary(language, 'unassigned_lists')}
-                                        </Heading>
-                                        <FlatList mt="$2" data={listGroups.unassigned} renderItem={({ item }) => renderList(item, library.baseUrl)} keyExtractor={(item, index) => index.toString()} />
-                                   </>
                               ) : null}
                          </>
                     ) : (
