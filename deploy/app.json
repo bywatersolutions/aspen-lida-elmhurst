@@ -1,0 +1,15 @@
+{
+  "name": "Elmhurst Public Library+",
+  "slug": "elmhurst",
+  "easId": "338eb36c-e082-4daa-a5a9-8067df2d4717",
+  "reverseDns": "org.aspendiscovery.elmhurst",
+  "discoveryUrl": "https://elmhurst.aspendiscovery.org/",
+  "greenhouseUrl": "https://elmhurst.aspendiscovery.org/",
+  "libraryId": "6",
+  "themeId": "1",
+  "background": "#ffffff",
+  "sentryProject": "aspen-lida-elmhurst",
+  "sentryDsn": "https://44ebdb0ef589ef11cea5e19ecdcc7c8c@o994439.ingest.us.sentry.io/4509905317462016",
+  "ascAppId": "6751508801",
+  "logLevel": "0"
+}
