@@ -436,7 +436,9 @@ const CreateLibraryCard = (data) => {
                          </Button>
                     ) : (
                          <VStack alignItems="center" space="sm">
-                              <Box bg={theme['colors']['warmGray']['200']} p="$3" borderRadius="$sm">
+                              <Box bg={theme['colors']['warmGray']['200']} 
+                                   p="$3" 
+                                   borderRadius="$sm">
                                    <Barcode
                                         value={barcodeValue}
                                         format={barcodeStyle}
